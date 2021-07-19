@@ -1,11 +1,20 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react'
 import Router from './src/component/Router'
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from './src/store/RootReducer';
 
-export default function App() {
-  return (
-    <Router />
-  );
+const store = createStore(rootReducer);
+class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Router />
+      </Provider>
+    );
+  }
 }
+
+export default App;
 
 
