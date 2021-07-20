@@ -1,20 +1,13 @@
 import { combineReducers } from "redux";
 
 const INITIAL_STATE = {
-    hihi: [
-        "hihi1",
-        "hihi2",
-    ],
+    currentScreen: "Home"
 };
 
 const rootReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case 'ADD_PRODUCT':
-            const {
-                hihi
-            } = state
-            hihi.push(action.payload)
-            const newState = { hihi }
+        case 'SWITCH_SCREEN':
+            const newState = { ...state, currentScreen : action.payload  }
             return newState;
         default:
             return state
