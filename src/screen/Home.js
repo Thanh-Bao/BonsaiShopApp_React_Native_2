@@ -5,9 +5,10 @@ import { bindActionCreators } from 'redux';
 import { switchScreen } from '../store/action/SwitchScreen'
 
 import NavigationBar from '../component/NavigationBar';
+import PreventBackButtonNav from '../component/PreventBackButtonNav'
 
 class Home extends Component {
-
+   
     render() {
         const DATA = [
             {
@@ -84,6 +85,7 @@ class Home extends Component {
         );
         return (
             <View style={{ flex: 1 }}>
+                <PreventBackButtonNav />
                 {/* <Card navigation={this.props.navigation} title="huhu11" itemIId={999} />
                 <Card navigation={this.props.navigation} title="huhu2" itemIId={123} /> */}
                 <FlatList

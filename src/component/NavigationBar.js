@@ -40,21 +40,27 @@ class NavigationBar extends Component {
                         name='shopping-cart'
                         type='font-awesome'
                         size={30}
-                        onPress={() => alert('hello')} />
+                        color={this.props.rootReducer.currentScreen == "Cart" ? "#0008ff" : "#000000"}
+                        onPress={() => { this.props.switchScreen("Cart"), this.props.navigation.navigate('Cart') }}
+                    />
                 </View>
                 <View style={styles.icon}>
                     <Icon
                         name='user'
                         type='font-awesome'
                         size={30}
-                        onPress={() => alert('hello')} />
+                        color={this.props.rootReducer.currentScreen == "Account" ? "#0008ff" : "#000000"}
+                        onPress={() => { this.props.switchScreen("Account"), this.props.navigation.navigate('Account') }}
+                    />
                 </View>
                 <View style={styles.icon}>
                     <Icon
                         name='bars'
                         type='font-awesome'
                         size={30}
-                        onPress={() => alert('hello')} />
+                        color={this.props.rootReducer.currentScreen == "More" ? "#0008ff" : "#000000"}
+                        onPress={() => { this.props.switchScreen("More"), this.props.navigation.navigate('More') }}
+                    />
                 </View>
             </View>
         )

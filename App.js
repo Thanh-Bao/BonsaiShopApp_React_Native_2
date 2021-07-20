@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StatusBar } from 'react-native'
+import { StatusBar, BackHandler, Alert } from 'react-native'
 import Router from './src/component/Router'
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
@@ -14,14 +14,16 @@ async function changeScreenOrientation() {
 }
 
 class App extends Component {
+
   
+
   render() {
     changeScreenOrientation();
     return (
       <Provider store={store}>
-          <StatusBar hidden={true}/>
-          <Router />
-        </Provider>
+        <StatusBar hidden={true} />
+        <Router />
+      </Provider>
     );
   }
 }
