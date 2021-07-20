@@ -1,27 +1,23 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
+import BackButton from './BackButton';
 
 
-const BackButton = (props) => {
-    return (
-        <Icon
-            name='chevron-left'
-            type='font-awesome'
-            size={20}
-            color="#fff"
-            onPress={() => { props.navigation.goBack() }}
-        />
-    );
+class CustomHeader extends Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        return (
+            <Header
+                leftComponent={<BackButton navigation={this.props.navigation} />}
+                centerComponent={{ text: this.props.title, style: { color: '#fff' } }}
+            />
+        );
+    }
 }
 
-const CustomHeader = (props) => {
-    return (
-        <Header
-            leftComponent={<BackButton navigation={props.navigation} />}
-            centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
-        />
-    );
-}
+
 
 export default CustomHeader;

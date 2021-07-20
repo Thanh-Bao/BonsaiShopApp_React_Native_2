@@ -6,6 +6,7 @@ import { switchScreen } from '../store/action/SwitchScreen'
 
 import NavigationBar from '../component/NavigationBar';
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
+import Header from '../component/CustomHeader'
 
 class Home extends Component {
    

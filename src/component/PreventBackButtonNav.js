@@ -26,8 +26,8 @@ export class preventBackButtonNav extends Component {
     }
     render() {
         return (
-            <Text>
-            </Text>
+            <View>
+            </View>
         )
     }
 }
