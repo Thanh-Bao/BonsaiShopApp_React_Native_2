@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, ScrollView, Image } from 'react-native'
+import { Text, View, ActivityIndicator, ScrollView } from 'react-native'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 import Header from '../component/CustomHeader'
 import axios from 'axios';
@@ -35,37 +35,21 @@ class Detail extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <PreventBackButtonNav />
-                <Header title={`Chi tiết về ${this.state.product == null ? "" : this.state.product.name}`} navigation={this.props.navigation} />
-
-                {this.state.product == null ? <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
-                    <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
-                        <ActivityIndicator size="large" color="#0000ff" />
-                        <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                            <Text >Vui lòng chờ ...</Text>
+                <Header title="Chi tiết sản phẩm" navigation={this.props.navigation} />
+                <ScrollView
+                    style={{ marginBottom: 55, marginRight: 10, marginLeft: 10 }}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false} r
+                >
+                    {this.state.product == null ? <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
+                        <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
+                            <ActivityIndicator size="large" color="#0000ff" />
                         </View>
                     </View>
-                </View>
-                    :
-                    <ScrollView
-                        style={{ flex: 1, marginBottom: 55, marginRight: 10, marginLeft: 10 }}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                    >
-                        <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center' }}>
-                            <Image
-                                style={{
-                                    flex: 1,
-                                    width: null,
-                                    height: 300,
-                                }}
-                                source={{ uri: this.state.product.detailImage }}
-                            />
-                        </View>
-
+                        :
                         <RenderHTML source={this.state.product.description} />
-                    </ScrollView>
-                }
-
+                    }
+                </ScrollView>
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
                     <NavigationBar navigation={this.props.navigation} />
                 </View>
