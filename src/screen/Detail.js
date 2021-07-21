@@ -6,14 +6,23 @@ import axios from 'axios';
 
 import RenderHTML from '../component/RenderHTMLToText'
 import NavigationBar from '../component/NavigationBar';
-
+import Slideshow from 'react-native-image-slider-show-razzium';
 
 class Detail extends Component {
     constructor(props) {
         super(props)
         this.state = {
             productID: this.props.route.params.productID,
-            product: null
+            product: null,
+            position: 1,
+            interval: null,
+            dataSource: [
+                {
+                    url: 'https://i.stack.imgur.com/y9DpT.jpg',
+                }, {
+                    url: 'https://i.stack.imgur.com/y9DpT.jpg',
+                },
+            ]
         }
 
     }
@@ -24,11 +33,32 @@ class Detail extends Component {
             url: 'https://baobaoshop.live/api/products/' + this.state.productID
         }).then((response) => {
             this.setState({
-                product: response.data
+                product: response.data,
+                dataSource: [
+                    {
+                        url: response.data.detailImage,
+                    }, {
+                        url: response.data.thumbnail,
+                    },
+                ]
             })
         }).catch((err) => {
             alert('lỗi lấy danh sách sản phẩm')
         })
+    }
+
+    componentWillMount() {
+        this.setState({
+            interval: setInterval(() => {
+                this.setState({
+                    position: this.state.position === this.state.dataSource.length ? 0 : this.state.position + 1
+                });
+            }, 2000)
+        });
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.state.interval);
     }
 
     render() {
@@ -52,14 +82,19 @@ class Detail extends Component {
                         showsHorizontalScrollIndicator={false}
                     >
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center' }}>
-                            <Image
-                                style={{
-                                    flex: 1,
-                                    width: null,
-                                    height: 300,
-                                }}
-                                source={{ uri: this.state.product.detailImage }}
-                            />
+
+                            {/* <Slideshow
+                                dataSource={[
+                                    { url: this.state.product.detailImage },
+                                    { url: this.state.product.thumbnail },
+                                ]} /> */}
+
+                            <Slideshow
+                                dataSource={this.state.dataSource}
+                                position={this.state.position}
+                                onPositionChanged={position => this.setState({ position })} />
+
+
                         </View>
 
                         <RenderHTML source={this.state.product.description} />
