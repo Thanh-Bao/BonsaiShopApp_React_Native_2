@@ -38,12 +38,12 @@ class CustomCard extends Component {
                             type="outline"
                             icon={<Icon name='visibility' color='#0066ff' />}
                             buttonStyle={{ borderRadius: 0, marginLeft: 0, marginRight: 10, marginBottom: 0 }}
-                            title=' Xem chi tiết' />
+                            title='Chi tiết' />
 
                         <Button
                             icon={<Icon name='add-shopping-cart' color='#ffffff' />}
                             buttonStyle={{ borderRadius: 0, marginLeft: 10, marginRight: 0, marginBottom: 0 }}
-                            title=' Thêm vào giỏ hàng' />
+                            title='Chọn Mua' />
                     </View>
                 </Card>
             </View>

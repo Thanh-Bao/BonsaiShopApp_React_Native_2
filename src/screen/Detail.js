@@ -65,7 +65,7 @@ class Detail extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <PreventBackButtonNav />
-                <Header title={`Chi tiết về ${this.state.product == null ? "" : this.state.product.name}`} navigation={this.props.navigation} />
+                <Header title={`thông tin ${this.state.product == null ? "" : this.state.product.name}`} navigation={this.props.navigation} />
 
                 {this.state.product == null ? <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
                     <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
