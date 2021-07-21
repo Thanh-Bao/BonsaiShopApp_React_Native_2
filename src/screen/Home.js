@@ -62,10 +62,13 @@ class Home extends Component {
                 />
 
                 {this.state.listProduct.length == 0 ?
-                <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#0000ff" />
-                </View>
-                :
+                    <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                        <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                            <Text >Vui lòng chờ ...</Text>
+                        </View>
+                    </View>
+                    :
                     <FlatList style={{ marginBottom: 65 }}
                         data={this.state.listProduct}
                         renderItem={({ item }) =>
