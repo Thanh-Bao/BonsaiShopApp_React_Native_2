@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 const INITIAL_STATE = {
-    previousScreen: "Home",
+    previousScreen: null,
     currentScreen: "Home"
 };
 

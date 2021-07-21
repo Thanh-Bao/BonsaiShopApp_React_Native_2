@@ -1,85 +1,99 @@
 import React, { Component } from 'react'
-import { Text, View, Button, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, Button, FlatList, StatusBar } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchScreen } from '../store/action/SwitchScreen'
 
 import NavigationBar from '../component/NavigationBar';
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
-import { Header } from 'react-native-elements';
-
-import CustomCard from '../component/CustomCard'
-import axios from 'axios';
+import Header from '../component/CustomHeader'
 
 class Home extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            listProduct: [],
-            page: 1
-        }
-    }
-
-
-
-    componentDidMount() {
-        this.getData();
-    }
-
-    getData = async () => {
-        axios({
-            method: 'get',
-            url: 'https://baobaoshop.live/api/Products?page=' + this.state.page
-        }).then((respnse) => {
-            this.setState({
-                listProduct: this.state.listProduct.concat(respnse.data.list)
-            })
-        }).catch((err) => {
-            alert('lỗi lấy danh sách sản phẩm')
-        })
-    }
-
-    handleLoadMore = () => {
-        this.setState({
-            page: this.state.page + 1
-        }, this.getData
-        )
-    }
-
-
+   
     render() {
+        const DATA = [
+            {
+                id: 'bd7acbe1a-c1b1-46c2-aed5-3ad53abb28ba',
+                title: 'First Item',
+            },
+            {
+                id: '3ac68a1fc-c605-48d3-a4f8-fbd91aa97f63',
+                title: 'Second Item',
+            },
+            {
+                id: '58694a0f-3da1-471f-bd96-1455171e29d72',
+                title: 'Third Item',
+            },
+            {
+                id: 'bd7acbea-c1b1-46c12-aed5-3ad53abb28ba',
+                title: 'First Item',
+            },
+            {
+                id: '3ac68afc-c605-418d3-a4f8-fbd91aa97f63',
+                title: 'Second Item',
+            },
+            {
+                id: '58694a0f-3da1-471f1-bd96-145571e29d72',
+                title: 'Third Item',
+            },
+            {
+                id: 'bd7acbea-c1b1-46c2-a1ed5-3ad53abb28ba',
+                title: 'First Item',
+            },
+            {
+                id: '3ac68afc-c605-48d3-a14f8-fbd91aa97f63',
+                title: 'Second Item',
+            },
+            {
+                id: '58694a0f-3da1-471f-bd196-145571e29d72',
+                title: 'Third Item',
+            },
+            {
+                id: 'bd7acbea-c1b1-46c2-ae11d5-3ad53abb28ba',
+                title: 'First Item',
+            },
+            {
+                id: '3ac68afc-c605-48d3-a4f18-fbd91aa97f63',
+                title: 'Second Item99',
+            },
+            {
+                id: '58694a0f-3da1-471f-bd916-145571e29d72',
+                title: 'Third Item',
+            },
+            {
+                id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
+                title: 'First Item',
+            },
+            {
+                id: '3ac68afc-c605-48d3-a4f8-fbd911aa97f63',
+                title: 'Second Item',
+            },
+            {
+                id: '58694a0f-3da1-471f-bd96-1451571e29d72',
+                title: 'Third Itemmm',
+            },
 
 
+        ];
+        const Item = ({ title }) => (
+            <View >
+                <Text style={{ marginTop: 70 }} >{title}</Text>
+            </View>
+        );
 
+        const renderItem = ({ item }) => (
+            <Item title={item.title} />
+        );
         return (
             <View style={{ flex: 1 }}>
                 <PreventBackButtonNav />
                 {/* <Card navigation={this.props.navigation} title="huhu11" itemIId={999} />
                 <Card navigation={this.props.navigation} title="huhu2" itemIId={123} /> */}
-                <Header
-                    centerComponent={{ text: 'Sản phảm mới', style: { color: '#fff' } }}
+                <FlatList
+                    data={DATA}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
                 />
-
-                {this.state.listProduct.length == 0 ? <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
-                    <ActivityIndicator size="large" color="#0000ff" /> </View> :
-                    <FlatList style={{ marginBottom: 65 }}
-                        data={this.state.listProduct}
-                        renderItem={({ item }) =>
-                            <CustomCard
-                                navigation={this.props.navigation}
-                                name={item.name}
-                                thumbnail={item.thumbnail}
-                                description={item.description}
-                                price={item.price}
-                                productID={item.productID}
-                            />
-                        }
-                        keyExtractor={(item, index) => index.toString()}
-                        onEndReached={this.handleLoadMore}
-                    />}
-
-
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
                     <NavigationBar navigation={this.props.navigation} />
                 </View>
