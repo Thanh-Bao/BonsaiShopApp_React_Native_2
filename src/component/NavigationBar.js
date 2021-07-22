@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
-import { Icon } from 'react-native-elements'
+import { Icon, Badge } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchScreen } from '../store/action/SwitchScreen'
@@ -11,6 +11,7 @@ class NavigationBar extends Component {
         this.state = {
             activeScreen: this.props.activeScreen != null ? this.props.activeScreen : "Home"
         }
+
     }
 
     render() {
@@ -24,6 +25,7 @@ class NavigationBar extends Component {
                         color={this.props.rootReducer.currentScreen == "Home" ? "#0008ff" : "#000000"}
                         onPress={() => { this.props.switchScreen("Home"), this.props.navigation.navigate('Home') }}
                     />
+
                 </View>
                 <View style={styles.icon}>
                     <Icon
@@ -42,6 +44,10 @@ class NavigationBar extends Component {
                         size={30}
                         color={this.props.rootReducer.currentScreen == "Cart" ? "#0008ff" : "#000000"}
                         onPress={() => { this.props.switchScreen("Cart"), this.props.navigation.navigate('Cart') }}
+                    />
+                    <Badge
+                        value="99" status="error"
+                        containerStyle={{ position: 'absolute', top: 7, right: 10 }}
                     />
                 </View>
                 <View style={styles.icon}>

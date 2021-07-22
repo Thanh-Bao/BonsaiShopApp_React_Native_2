@@ -122,11 +122,11 @@ class Detail extends Component {
                             <Text style={{ fontSize: 30, fontWeight: "bold" }}>{this.state.product.name}</Text>
                         </View>
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: 'space-between', marginTop: 30, marginLeft: 20, marginRight: 30 }}>
-                            <Text style={{ fontSize: 30, fontWeight: "bold" ,color: 'red'}}>  {numeral(this.state.product.price).format('0,0')} đ</Text>
+                            <Text style={{ fontSize: 25, fontWeight: "bold" ,color: 'red'}}>  {numeral(this.state.product.price).format('0,0')} đ</Text>
                             <Button
-                                onPress={() => { alert(huhu) }}
+                                onPress={() => { alert("huhu") }}
                                 icon={<Icon name='add-shopping-cart' color='#ffff' />}
-                                buttonStyle={{ backgroundColor: '#f76f00', borderRadius: 5, fontWeight: "900" }}
+                                buttonStyle={{ backgroundColor: '#f76f00', borderRadius: 5, fontWeight: "900"}}
                                 title='Thêm vào giỏ hàng' />
                         </View>
 

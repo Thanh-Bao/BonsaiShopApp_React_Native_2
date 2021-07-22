@@ -9,7 +9,9 @@ export class BackButton extends Component {
     }
     render() {
         return (
-            <TouchableOpacity style={{ paddingLeft: 10 }} onPress={() => { this.props.navigation.navigate(this.props.rootReducer.previousScreen) }}>
+            <TouchableOpacity
+                hitSlop={{ top: 50, bottom: 100, left: 100, right: 200 }}
+                style={{ paddingLeft: 10 }} onPress={() => { this.props.navigation.navigate(this.props.rootReducer.previousScreen) }}>
                 <Icon
                     name='chevron-left'
                     type='font-awesome'
