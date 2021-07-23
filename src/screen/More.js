@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { Text, View ,BackHandler, Alert} from 'react-native'
+import { Text, View, BackHandler, Alert } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 import Header from '../component/CustomHeader'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class More extends Component {
-    
+
     render() {
-        
         return (
             <View style={{ flex: 1 }}>
                 <PreventBackButtonNav />

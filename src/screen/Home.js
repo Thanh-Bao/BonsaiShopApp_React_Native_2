@@ -3,6 +3,7 @@ import { Text, View, Button, FlatList, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchScreen } from '../store/action/SwitchScreen'
+import { addUserPhoneLogin } from '../store/action/addUserPhoneLogin'
 
 import NavigationBar from '../component/NavigationBar';
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
@@ -11,13 +12,15 @@ import { Header } from 'react-native-elements';
 import CustomCard from '../component/CustomCard'
 import axios from 'axios';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 class Home extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             listProduct: [],
-            page: 1
+            page: 1,
         }
     }
 
@@ -25,6 +28,8 @@ class Home extends Component {
 
     componentDidMount() {
         this.getData();
+        this.storeData();
+        this.getUserPhoneLogined();
     }
 
     getData = async () => {
@@ -48,10 +53,30 @@ class Home extends Component {
     }
 
 
+
+    storeData = async () => {
+        try {
+            await AsyncStorage.setItem('USER_PHONE', "0943417917")
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    getUserPhoneLogined = async () => {
+        try {
+            const phone = await AsyncStorage.getItem('USER_PHONE')
+            if (phone != null) {
+            this.props.addUserPhoneLogin(phone)    
+            }
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
+
     render() {
-
-
-
         return (
             <View style={{ flex: 1 }}>
                 <PreventBackButtonNav />
@@ -103,6 +128,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => (
     bindActionCreators({
         switchScreen,
+        addUserPhoneLogin
     }, dispatch)
 )
 
