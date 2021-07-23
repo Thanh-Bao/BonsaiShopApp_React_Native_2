@@ -43,7 +43,6 @@ class CustomCard extends Component {
                 alert("Thêm vào giỏ hàng thất bại, Xóa LOCALSTORAGE & Ctrl+F5 & mở tab ấn danh");
             }
         )
-
     }
 
 

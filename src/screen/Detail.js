@@ -1,16 +1,20 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, ScrollView } from 'react-native'
+import { Text, View, ActivityIndicator, ScrollView,ToastAndroid  } from 'react-native'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 import Header from '../component/CustomHeader'
 import axios from 'axios';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import RenderHTML from '../component/RenderHTMLToText'
 import NavigationBar from '../component/NavigationBar';
 import Slideshow from 'react-native-image-slider-show-razzium';
-
+import { updateCartCounter } from '../store/action/countCartItem'
 import { ListItem, Avatar, Icon, Button } from 'react-native-elements'
-
+import { switchScreen } from '../store/action/SwitchScreen'
+import { addUserPhoneLogin } from '../store/action/addUserPhoneLogin'
 import Styles from "../component/Styles"
+import callAPI from '../component/callAPIMainServer'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Detail extends Component {
     constructor(props) {
@@ -41,6 +45,40 @@ class Detail extends Component {
             ]
         }
     }
+
+    showToast = productName => {
+        ToastAndroid.show(`Đã thêm ${productName} vào giỏ hàng !`, ToastAndroid.SHORT);
+    };
+
+
+    updateCartCounterAsync = async (count) => {
+        await AsyncStorage.setItem("CART_COUNTER", count);
+    }
+
+    addCart = (productID, productName) => {
+        let userPhone = this.props.rootReducer.userPhoneLogined;
+        callAPI(`Cart/${userPhone}`, 'PUT', { productID: productID }).then(() => {
+            this.showToast(productName);
+            callAPI(`Cart/count/${userPhone}`, 'GET').then(
+                res => {
+                    this.props.updateCartCounter(res.data.count);
+                    // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
+                    this.updateCartCounterAsync(`${this.props.rootReducer.cartCouter}`)
+                }
+            ).catch(err => {
+                console.log("Lỗi lấy số lượng giỏ hàng");
+                console.log(err);
+            })
+        }
+        ).catch(
+            err => {
+                console.log(err);
+                alert("Thêm vào giỏ hàng thất bại, Xóa LOCALSTORAGE & Ctrl+F5 & mở tab ấn danh");
+            }
+        )
+    }
+
+
 
     componentDidMount() {
         axios({
@@ -122,11 +160,11 @@ class Detail extends Component {
                             <Text style={{ fontSize: 30, fontWeight: "bold" }}>{this.state.product.name}</Text>
                         </View>
                         <View style={{ flex: 1, flexDirection: "row", justifyContent: 'space-between', marginTop: 30, marginLeft: 20, marginRight: 30 }}>
-                            <Text style={{ fontSize: 25, fontWeight: "bold" ,color: 'red'}}>  {numeral(this.state.product.price).format('0,0')} đ</Text>
+                            <Text style={{ fontSize: 25, fontWeight: "bold", color: 'red' }}>  {numeral(this.state.product.price).format('0,0')} đ</Text>
                             <Button
-                                onPress={() => { alert("huhu") }}
+                                onPress={() => { this.addCart(this.state.product.productId, this.state.product.name) }}
                                 icon={<Icon name='add-shopping-cart' color='#ffff' />}
-                                buttonStyle={{ backgroundColor: '#f76f00', borderRadius: 5, fontWeight: "900"}}
+                                buttonStyle={{ backgroundColor: '#f76f00', borderRadius: 5, fontWeight: "900" }}
                                 title='Thêm vào giỏ hàng' />
                         </View>
 
@@ -163,7 +201,20 @@ class Detail extends Component {
     }
 }
 
-export default Detail;
+const mapStateToProps = (state) => {
+    const { rootReducer } = state
+    return { rootReducer }
+};
+
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+        switchScreen,
+        addUserPhoneLogin,
+        updateCartCounter
+    }, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Detail);
 
 
 
