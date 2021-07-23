@@ -4,15 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchScreen } from '../store/action/SwitchScreen'
 import { addUserPhoneLogin } from '../store/action/addUserPhoneLogin'
-
 import NavigationBar from '../component/NavigationBar';
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 import { Header } from 'react-native-elements';
-
 import CustomCard from '../component/CustomCard'
 import axios from 'axios';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { updateCartCounter } from '../store/action/countCartItem'
 
 class Home extends Component {
 
@@ -24,12 +22,18 @@ class Home extends Component {
         }
     }
 
-
+    getCartCounter = async () => {
+        const value = await AsyncStorage.getItem("CART_COUNTER")
+        if (value != null) {
+            this.props.updateCartCounter(value)
+        }
+    }
 
     componentDidMount() {
         this.getData();
         this.storeData();
         this.getUserPhoneLogined();
+        this.getCartCounter();
     }
 
     getData = async () => {
@@ -66,7 +70,7 @@ class Home extends Component {
         try {
             const phone = await AsyncStorage.getItem('USER_PHONE')
             if (phone != null) {
-            this.props.addUserPhoneLogin(phone)    
+                this.props.addUserPhoneLogin(phone)
             }
 
         } catch (e) {
@@ -128,7 +132,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => (
     bindActionCreators({
         switchScreen,
-        addUserPhoneLogin
+        addUserPhoneLogin,
+        updateCartCounter
     }, dispatch)
 )
 

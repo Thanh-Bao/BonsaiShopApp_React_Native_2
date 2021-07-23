@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     previousScreen: "Home",
     currentScreen: "Home",
     userPhoneLogined: null,
+    cartCouter: 0,
 };
 
 const rootReducer = (state = INITIAL_STATE, action) => {
@@ -14,6 +15,9 @@ const rootReducer = (state = INITIAL_STATE, action) => {
         case 'UPDATE_USER_PHONE_LOGINED':
             const newState2 = { ...state, userPhoneLogined: action.payload }
             return newState2;
+        case 'UPDATE_CART_COUNTER':
+            const newState3 = { ...state, cartCouter: action.payload }
+            return newState3;
         default:
             return state
     }

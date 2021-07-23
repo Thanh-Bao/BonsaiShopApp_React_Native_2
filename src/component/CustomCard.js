@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Text, View, Image } from 'react-native'
+import { Text, View, Image, ToastAndroid } from 'react-native'
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 import { decode } from 'he'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import callAPI from '../component/callAPIMainServer'
-
+import { updateCartCounter } from '../store/action/countCartItem'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 class CustomCard extends Component {
@@ -15,16 +15,27 @@ class CustomCard extends Component {
     }
 
 
-    addCart = productID => {
+    showToast = productName => {
+        ToastAndroid.show(`Đã thêm ${productName} vào giỏ hàng !`, ToastAndroid.SHORT);
+    };
+
+    updateCartCounterAsync = async (count) => {
+        await AsyncStorage.setItem("CART_COUNTER", count);
+    }
+
+    addCart = (productID, productName) => {
         let userPhone = this.props.rootReducer.userPhoneLogined;
         callAPI(`Cart/${userPhone}`, 'PUT', { productID: productID }).then(() => {
-            callAPI(`Cart/count/${userPhone}`, 'GET', { productID: productID }).then(
+            this.showToast(productName);
+            callAPI(`Cart/count/${userPhone}`, 'GET').then(
                 res => {
-                    // this.props.dispatch({ type: "UPDATE_TOTAL_ITEM_CART", data: res.data });
+                    this.props.updateCartCounter(res.data.count);
                     // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
+                    this.updateCartCounterAsync(`${this.props.rootReducer.cartCouter}`)
                 }
-            ).catch(() => {
-                alert("Lỗi lấy số lượng giỏ hàng");
+            ).catch(err => {
+                console.log("Lỗi lấy số lượng giỏ hàng");
+                console.log(err);
             })
         }
         ).catch(
@@ -77,7 +88,7 @@ class CustomCard extends Component {
                             title='Chi tiết' />
 
                         <Button
-                            onPress={() => { this.addCart(this.props.productID)}}
+                            onPress={() => { this.addCart(this.props.productID, this.props.name) }}
                             icon={<Icon name='add-shopping-cart' color='#ffffff' />}
                             buttonStyle={{ borderRadius: 0, marginLeft: 10, marginRight: 0, marginBottom: 0 }}
                             title='Chọn Mua' />
@@ -94,7 +105,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => (
     bindActionCreators({
-
+        updateCartCounter
     }, dispatch)
 )
 
