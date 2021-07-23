@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, BackHandler, Alert } from 'react-native'
+import { Text, View, BackHandler, Alert, Button } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 
@@ -12,6 +12,10 @@ class Account extends Component {
                 <PreventBackButtonNav />
                 <Header title="Quản lý tài khoản" navigation={this.props.navigation} />
                 <Text> Account </Text>
+                <Button
+                    title='Đăng nhập'
+                    onPress={() => { this.props.navigation.navigate('Login') }}
+                ></Button>
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
                     <NavigationBar navigation={this.props.navigation} />
                 </View>

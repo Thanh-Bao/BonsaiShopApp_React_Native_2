@@ -8,6 +8,8 @@ import Search from '../screen/Search';
 import Cart from '../screen/Cart';
 import Account from '../screen/Account';
 import More from '../screen/More';
+import Login from '../screen/Login'
+
 
 const Stack = createStackNavigator();
 export default class Router extends Component {
@@ -23,6 +25,7 @@ export default class Router extends Component {
                     <Stack.Screen name="Cart" component={Cart} options={{ headerShown: false }} />
                     <Stack.Screen name="Account" component={Account} options={{ headerShown: false }} />
                     <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
+                    <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
                 </Stack.Navigator>
             </NavigationContainer >
         )
