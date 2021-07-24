@@ -1,16 +1,21 @@
 import React, { Component } from 'react'
 import { Input, Center, Button, NativeBaseProvider, Avatar } from "native-base"
-import { Text, View } from 'react-native'
+import { Text, View ,ToastAndroid} from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
+import CallAPI from '../component/callAPIMainServer'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export class Login extends Component {
 
     constructor(props) {
         super(props);
         this.state = ({
-            show: false
+            show: false,
+            userPhone: null,
+            password: null
         })
     }
 
@@ -18,6 +23,57 @@ export class Login extends Component {
         this.setState({
             show: !this.state.show
         })
+    }
+
+    storeUserInfo = async (phone, name) => {
+        await AsyncStorage.setItem("USER_PHONE", `${phone}`)
+        await AsyncStorage.setItem("USER_NAME", `${name}`)
+    }
+
+    showToast = () => {
+        ToastAndroid.show(`Đăng nhập thành công`, ToastAndroid.LONG);
+    };
+
+
+    // getUser = async () => {
+    //     const value1 = await AsyncStorage.getItem("USER_PHONE")
+    //     const value2 = await AsyncStorage.getItem("USER_NAME")
+    //     if (value1 != null && value2!=1) {
+    //         console.log(value1 + "_____" + value2)
+    //     }
+    // }
+
+    handleLogin() {
+        const { userPhone, password } = this.state
+        if (userPhone == null || userPhone === '' || password == null || password == '') {
+            alert("Vui lòng nhập đầy đủ số điện thoại và mật khẩu!")
+        } else {
+            let body = {
+                phone: this.state.userPhone,
+                password: this.state.password,
+            }
+            CallAPI('Users/login', 'POST', null, body).then(res => {
+                // localStorage.setItem("token", res.data.token);
+                // if (res.data.name === " ") {
+                //     // localStorage.setItem("customerName", res.data.phone);
+                //     // this.props.dispatch({ type: "UPDATE_CUSTOMER_WELCOME", data: res.data.phone });
+                // } else {
+                //     // localStorage.setItem("customerName", res.data.name);
+                //     // this.props.dispatch({ type: "UPDATE_CUSTOMER_WELCOME", data: res.data.name });
+                // }
+                // localStorage.setItem("PHONEUSERLOGINED", res.data.phone);
+                // this.props.history.push('/home')
+                this.storeUserInfo(res.data.phone, res.data.name)
+                this.showToast()
+                this.props.navigation.navigate('Home')
+
+            }).catch(
+                err => {
+                    alert("Đăng nhập thất bại, vui lòng kiểm  tra lại")
+                }
+            )
+        }
+
     }
 
     render() {
@@ -32,10 +88,12 @@ export class Login extends Component {
                             size="2xl"
                             source={require('./../media/bonsai_icon.png')}
                         >
-                            RB
                         </Avatar>
                     </View>
                     <Input
+                        onChangeText={e => this.setState({
+                            userPhone: e
+                        })}
                         w="80%"
                         type="number"
                         placeholder="Số điện thoại"
@@ -44,6 +102,9 @@ export class Login extends Component {
 
                     <View style={{ marginTop: 10 }}>
                         <Input
+                            onChangeText={e => this.setState({
+                                password: e
+                            })}
                             w="80%"
                             type={this.state.show ? "text" : "password"}
                             InputRightElement={
@@ -55,10 +116,14 @@ export class Login extends Component {
                         />
                     </View>
                     <View style={{ marginTop: 10 }}>
-                        <Button colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Đăng nhập</Text></Button>
+                        <Button
+                            onPress={() => this.handleLogin()}
+                            colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Đăng nhập</Text></Button>
                         <Text style={{ justifyContent: "center", textAlign: 'center', marginTop: 20 }}>Hoặc đăng kí nếu chưa có tài khoản</Text>
                         <View style={{ marginVertical: 20 }}>
-                            <Button colorScheme="orange" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15 }}>Đăng ký</Text></Button>
+                            <Button colorScheme="orange"
+                                onPress={() => { this.props.navigation.navigate('Register') }}
+                            ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15 }}>Đăng ký</Text></Button>
                         </View>
 
                     </View>

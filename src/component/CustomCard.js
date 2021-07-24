@@ -24,25 +24,29 @@ class CustomCard extends Component {
     }
 
     addCart = (productID, productName) => {
-        let userPhone = this.props.rootReducer.userPhoneLogined;
-        callAPI(`Cart/${userPhone}`, 'PUT', { productID: productID }).then(() => {
-            this.showToast(productName);
-            callAPI(`Cart/count/${userPhone}`, 'GET').then(
-                res => {
-                    this.props.updateCartCounter(res.data.count);
-                    // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
-                    this.updateCartCounterAsync(`${this.props.rootReducer.cartCouter}`)
-                }
-            ).catch(err => {
-                console.log("Lỗi lấy số lượng giỏ hàng");
-                console.log(err);
-            })
-        }
-        ).catch(
-            () => {
-                alert("Thêm vào giỏ hàng thất bại, Xóa LOCALSTORAGE & Ctrl+F5 & mở tab ấn danh");
+        if (this.props.rootReducer.userPhoneLogined===null) {
+            this.props.navigation.navigate('Login')
+        } else {
+            let userPhone = this.props.rootReducer.userPhoneLogined;
+            callAPI(`Cart/${userPhone}`, 'PUT', { productID: productID }).then(() => {
+                this.showToast(productName);
+                callAPI(`Cart/count/${userPhone}`, 'GET').then(
+                    res => {
+                        this.props.updateCartCounter(res.data.count);
+                        // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
+                        this.updateCartCounterAsync(`${this.props.rootReducer.cartCouter}`)
+                    }
+                ).catch(err => {
+                    console.log("Lỗi lấy số lượng giỏ hàng");
+                    console.log(err);
+                })
             }
-        )
+            ).catch(
+                () => {
+                    alert("Thêm vào giỏ hàng thất bại, Xóa LOCALSTORAGE & Ctrl+F5 & mở tab ấn danh");
+                }
+            )
+        }
     }
 
 

@@ -31,7 +31,6 @@ class Home extends Component {
 
     componentDidMount() {
         this.getData();
-        this.storeData();
         this.getUserPhoneLogined();
         this.getCartCounter();
     }
@@ -58,13 +57,6 @@ class Home extends Component {
 
 
 
-    storeData = async () => {
-        try {
-            await AsyncStorage.setItem('USER_PHONE', "0943417917")
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     getUserPhoneLogined = async () => {
         try {
