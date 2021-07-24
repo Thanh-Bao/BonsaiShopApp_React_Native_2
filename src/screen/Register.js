@@ -5,7 +5,7 @@ import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 
-export class Login extends Component {
+export class Register extends Component {
 
     constructor(props) {
         super(props);
@@ -72,4 +72,4 @@ export class Login extends Component {
     }
 }
 
-export default Login
+export default Register
