@@ -11,6 +11,7 @@ import CustomCard from '../component/CustomCard'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateCartCounter } from '../store/action/countCartItem'
+import { storeToken } from '../store/action/storeToken'
 
 class Home extends Component {
 
@@ -22,17 +23,22 @@ class Home extends Component {
         }
     }
 
-    getCartCounter = async () => {
+    getUserData = async () => {
         const value = await AsyncStorage.getItem("CART_COUNTER")
+        const token = await AsyncStorage.getItem("TOKEN")
         if (value != null) {
             this.props.updateCartCounter(value)
+        }
+        if (token != null) {
+            this.props.storeToken(token)
         }
     }
 
     componentDidMount() {
         this.getData();
         this.getUserPhoneLogined();
-        this.getCartCounter();
+        this.getUserData();
+        console.log(this.props.rootReducer.userPhoneLogined)
     }
 
     getData = async () => {
@@ -125,7 +131,8 @@ const mapDispatchToProps = dispatch => (
     bindActionCreators({
         switchScreen,
         addUserPhoneLogin,
-        updateCartCounter
+        updateCartCounter,
+        storeToken
     }, dispatch)
 )
 

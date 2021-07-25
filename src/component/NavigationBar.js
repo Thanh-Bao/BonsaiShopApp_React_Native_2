@@ -4,6 +4,9 @@ import { Icon, Badge } from 'react-native-elements'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { switchScreen } from '../store/action/SwitchScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 class NavigationBar extends Component {
 
     constructor(props) {
@@ -11,8 +14,20 @@ class NavigationBar extends Component {
         this.state = {
             activeScreen: this.props.activeScreen != null ? this.props.activeScreen : "Home"
         }
+        userPhone: null
 
     }
+
+
+    getUserPhone = async () => {
+        const phone = await AsyncStorage.getItem("USER_PHONE");
+        if (phone != null) {
+            this.setState({
+                userPhone: phone
+            })
+        }
+    }
+
 
     render() {
         return (
@@ -56,7 +71,7 @@ class NavigationBar extends Component {
                         type='font-awesome'
                         size={30}
                         color={this.props.rootReducer.currentScreen == "Account" ? "#0008ff" : "#000000"}
-                        onPress={() => { this.props.switchScreen("Account"), this.props.navigation.navigate('Account') }}
+                        onPress={() => { this.state.userPhone !== null ? (this.props.switchScreen("Login"), this.props.navigation.navigate('Login')) : (this.props.switchScreen("Account"), this.props.navigation.navigate('Account')) }}
                     />
                 </View>
                 <View style={styles.icon}>

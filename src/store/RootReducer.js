@@ -5,6 +5,7 @@ const INITIAL_STATE = {
     currentScreen: "Home",
     userPhoneLogined: null,
     cartCouter: 0,
+    token: "a123"
 };
 
 const rootReducer = (state = INITIAL_STATE, action) => {
@@ -18,6 +19,9 @@ const rootReducer = (state = INITIAL_STATE, action) => {
         case 'UPDATE_CART_COUNTER':
             const newState3 = { ...state, cartCouter: action.payload }
             return newState3;
+        case 'STORE_TOKEN':
+            const newState4 = { ...state, token: action.payload }
+            return newState4;
         default:
             return state
     }

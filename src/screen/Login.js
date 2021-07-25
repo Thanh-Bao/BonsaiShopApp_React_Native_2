@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import { Input, Center, Button, NativeBaseProvider, Avatar } from "native-base"
-import { Text, View ,ToastAndroid} from 'react-native'
+import { Text, View, ToastAndroid } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 import CallAPI from '../component/callAPIMainServer'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { switchScreen } from '../store/action/SwitchScreen'
+import { updateCartCounter } from '../store/action/countCartItem'
+import { storeToken } from '../store/action/storeToken'
+import { addUserPhoneLogin } from '../store/action/addUserPhoneLogin'
 
 
 export class Login extends Component {
@@ -25,9 +31,10 @@ export class Login extends Component {
         })
     }
 
-    storeUserInfo = async (phone, name) => {
+    storeUserInfo = async (phone, name, token) => {
         await AsyncStorage.setItem("USER_PHONE", `${phone}`)
         await AsyncStorage.setItem("USER_NAME", `${name}`)
+        await AsyncStorage.setItem("TOKEN", `${token}`)
     }
 
     showToast = () => {
@@ -52,7 +59,8 @@ export class Login extends Component {
                 phone: this.state.userPhone,
                 password: this.state.password,
             }
-            CallAPI('Users/login', 'POST', null, body).then(res => {
+            CallAPI("", 'Users/login', 'POST', null, body).then(res => {
+                const { phone, name, token } = res.data
                 // localStorage.setItem("token", res.data.token);
                 // if (res.data.name === " ") {
                 //     // localStorage.setItem("customerName", res.data.phone);
@@ -63,12 +71,15 @@ export class Login extends Component {
                 // }
                 // localStorage.setItem("PHONEUSERLOGINED", res.data.phone);
                 // this.props.history.push('/home')
-                this.storeUserInfo(res.data.phone, res.data.name)
+                this.props.storeToken(token)
+                this.props.addUserPhoneLogin(phone)
+                this.storeUserInfo(phone, name, token)
                 this.showToast()
                 this.props.navigation.navigate('Home')
 
             }).catch(
                 err => {
+                    console.log(err)
                     alert("Đăng nhập thất bại, vui lòng kiểm  tra lại")
                 }
             )
@@ -137,4 +148,16 @@ export class Login extends Component {
     }
 }
 
-export default Login
+const mapStateToProps = (state) => {
+    const { rootReducer } = state
+    return { rootReducer }
+};
+
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+        addUserPhoneLogin,
+        storeToken
+    }, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

@@ -24,13 +24,14 @@ class CustomCard extends Component {
     }
 
     addCart = (productID, productName) => {
-        if (this.props.rootReducer.userPhoneLogined===null) {
+        const token = this.props.rootReducer.token
+        if (this.props.rootReducer.userPhoneLogined === null) {
             this.props.navigation.navigate('Login')
         } else {
             let userPhone = this.props.rootReducer.userPhoneLogined;
-            callAPI(`Cart/${userPhone}`, 'PUT', { productID: productID }).then(() => {
+            callAPI(token, `Cart/${userPhone}`, 'PUT', { productID: productID }).then(() => {
                 this.showToast(productName);
-                callAPI(`Cart/count/${userPhone}`, 'GET').then(
+                callAPI(token, `Cart/count/${userPhone}`, 'GET').then(
                     res => {
                         this.props.updateCartCounter(res.data.count);
                         // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
