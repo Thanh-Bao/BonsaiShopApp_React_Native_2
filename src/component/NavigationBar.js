@@ -30,6 +30,7 @@ class NavigationBar extends Component {
 
 
     render() {
+        const currentScreen = this.props.rootReducer.currentScreen;
         return (
             <View style={styles.container}>
                 <View style={styles.icon}>
@@ -37,7 +38,7 @@ class NavigationBar extends Component {
                         name='home'
                         type='font-awesome'
                         size={30}
-                        color={this.props.rootReducer.currentScreen == "Home" ? "#0008ff" : "#000000"}
+                        color={currentScreen == "Home" ? "#0008ff" : "#000000"}
                         onPress={() => { this.props.switchScreen("Home"), this.props.navigation.navigate('Home') }}
                     />
 
@@ -47,7 +48,7 @@ class NavigationBar extends Component {
                         name='search'
                         type='font-awesome'
                         size={30}
-                        color={this.props.rootReducer.currentScreen == "Search" ? "#0008ff" : "#000000"}
+                        color={currentScreen == "Search" ? "#0008ff" : "#000000"}
                         // onPress={() => { this.props.navigation.navigate('Search', { itemId: this.props.itemIId }) }}
                         onPress={() => { this.props.switchScreen("Search"), this.props.navigation.navigate('Search') }}
                     />
@@ -57,7 +58,7 @@ class NavigationBar extends Component {
                         name='shopping-cart'
                         type='font-awesome'
                         size={30}
-                        color={this.props.rootReducer.currentScreen == "Cart" ? "#0008ff" : "#000000"}
+                        color={currentScreen == "Cart" ? "#0008ff" : "#000000"}
                         onPress={() => { this.props.switchScreen("Cart"), this.props.navigation.navigate('Cart') }}
                     />
                     <Badge
@@ -70,8 +71,12 @@ class NavigationBar extends Component {
                         name='user'
                         type='font-awesome'
                         size={30}
-                        color={this.props.rootReducer.currentScreen == "Account" ? "#0008ff" : "#000000"}
-                        onPress={() => { this.state.userPhone !== null ? (this.props.switchScreen("Login"), this.props.navigation.navigate('Login')) : (this.props.switchScreen("Account"), this.props.navigation.navigate('Account')) }}
+                        color={currentScreen == "Account" || currentScreen == "Login" || currentScreen == "Register" ? "#0008ff" : "#000000"}
+                        onPress={() => {
+                            this.state.userPhone !== null ?
+                            (this.props.switchScreen("Login"), this.props.navigation.navigate('Login')) :
+                            (this.props.switchScreen("Account"), this.props.navigation.navigate('Account'))
+                        }}
                     />
                 </View>
                 <View style={styles.icon}>
@@ -79,7 +84,7 @@ class NavigationBar extends Component {
                         name='bars'
                         type='font-awesome'
                         size={30}
-                        color={this.props.rootReducer.currentScreen == "More" ? "#0008ff" : "#000000"}
+                        color={currentScreen == "More" ? "#0008ff" : "#000000"}
                         onPress={() => { this.props.switchScreen("More"), this.props.navigation.navigate('More') }}
                     />
                 </View>

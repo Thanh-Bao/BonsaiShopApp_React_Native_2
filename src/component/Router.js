@@ -10,6 +10,7 @@ import Account from '../screen/Account';
 import More from '../screen/More';
 import Login from '../screen/Login'
 import Register from '../screen/Register'
+import CreatePassword from '../screen/CreatePassword'
 
 
 const Stack = createStackNavigator();
@@ -28,6 +29,7 @@ export default class Router extends Component {
                     <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
                     <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
                     <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+                    <Stack.Screen name="CreatePassword" component={CreatePassword} options={{ headerShown: false }} />
                 </Stack.Navigator>
             </NavigationContainer >
         )
