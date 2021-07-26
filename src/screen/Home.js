@@ -38,7 +38,6 @@ class Home extends Component {
         this.getData();
         this.getUserPhoneLogined();
         this.getUserData();
-        console.log(this.props.rootReducer.userPhoneLogined)
     }
 
     getData = async () => {
