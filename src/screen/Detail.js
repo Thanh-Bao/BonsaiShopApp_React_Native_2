@@ -66,7 +66,7 @@ class Detail extends Component {
                     res => {
                         this.props.updateCartCounter(res.data.count);
                         // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
-                        this.updateCartCounterAsync(`${this.props.rootReducer.cartCouter}`)
+                        this.updateCartCounterAsync(`${this.props.rootReducer.cartCounter}`)
                     }
                 ).catch(err => {
                     console.log("Lỗi lấy số lượng giỏ hàng");

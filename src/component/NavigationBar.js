@@ -62,7 +62,7 @@ class NavigationBar extends Component {
                         onPress={() => { this.props.switchScreen("Cart"), this.props.navigation.navigate('Cart') }}
                     />
                     <Badge
-                        value={this.props.rootReducer.cartCouter} status="error"
+                        value={this.props.rootReducer.cartCounter} status="error"
                         containerStyle={{ position: 'absolute', top: 7, right: 10 }}
                     />
                 </View>
