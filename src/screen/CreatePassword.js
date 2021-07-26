@@ -24,9 +24,18 @@ export class CreatePassword extends Component {
 
 
     handleSubmit() {
-        alert(this.state.password)
+        const user = {
+            phone: this.state.newPhone,
+            password: this.state.password
+        }
+        CallAPI(null, 'Users/register', 'POST', null, user).then(res => {
+            alert('Đăng kí tài khoản thành công, mời bạn đăng nhập');
+            this.props.navigation.navigate('Login');
+            this.showToast()
+        }).catch(res => {
+            alert('Xác thực thất bại, lỗi hệ thống');
+        });
 
-        this.showToast()
     }
 
     showToast = () => {

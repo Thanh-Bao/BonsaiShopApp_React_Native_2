@@ -63,13 +63,14 @@
 // export default Register
 
 import * as React from "react";
-import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform,ToastAndroid } from "react-native";
+import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from "react-native";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
 import { Input, Center, NativeBaseProvider, Avatar } from "native-base"
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
+import CallAPI from '../component/callAPIMainServer'
 
 // Initialize Firebase JS SDK
 // https://firebase.google.com/docs/web/setup
@@ -89,6 +90,30 @@ try {
 } catch (err) {
   // ignore app already initialized error in snack
 }
+
+function checkPhoneExist(phone) {
+  const body = {
+    phone: phone,
+    password: "Admin123@#"
+  }
+
+  let result = true
+
+  CallAPI(null, 'Users/check-exist', 'POST', null, body).then(res => {
+    if (res.data) {
+      alert("Số điện thoại đã được đăng ký")
+    } else {
+      result = false
+    }
+  }).catch(
+    err =>
+      alert("Lỗi kiểm tra SDT, vui lòng tiếp tục sử dụng")
+  )
+
+  return result;
+}
+
+
 
 export default function Register(props) {
   const recaptchaVerifier = React.useRef(null);
@@ -124,7 +149,7 @@ export default function Register(props) {
           placeholder=" 0943888999"
           autoFocus
           keyboardType="numeric"
-          onChangeText={(phoneNumber) => setPhoneNumber("+84" + phoneNumber)}
+          onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
         />
 
         <Button
@@ -132,20 +157,24 @@ export default function Register(props) {
           title="Nhận Mã OTP"
           disabled={!phoneNumber}
           onPress={async () => {
-            // The FirebaseRecaptchaVerifierModal ref implements the
-            // FirebaseAuthApplicationVerifier interface and can be
-            // passed directly to `verifyPhoneNumber`.
-            try {
-              const phoneProvider = new firebase.auth.PhoneAuthProvider();
-              const verificationId = await phoneProvider.verifyPhoneNumber(
-                phoneNumber,
-                recaptchaVerifier.current
-              );
-              setVerificationId(verificationId);
+
+            if (checkPhoneExist(phoneNumber)) {
+              // The FirebaseRecaptchaVerifierModal ref implements the
+              // FirebaseAuthApplicationVerifier interface and can be
+              // passed directly to `verifyPhoneNumber`.
+              try {
+                const phoneProvider = new firebase.auth.PhoneAuthProvider();
+                const verificationId = await phoneProvider.verifyPhoneNumber(
+                  "+84" + phoneNumber,
+                  recaptchaVerifier.current
+                );
+                setVerificationId(verificationId);
                 ToastAndroid.show(`Mã OTP đã được gửi đi`, ToastAndroid.LONG);
-            } catch (err) {
-              alert(`LỖI : ${err.message}`);
+              } catch (err) {
+                alert(`LỖI : ${err.message}`);
+              }
             }
+
           }}
         />
 
