@@ -4,8 +4,8 @@ import { Card, ListItem, Button, Icon } from 'react-native-elements'
 import { decode } from 'he'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import callAPI from '../component/callAPIMainServer'
 import { updateCartCounter } from '../store/action/countCartItem'
+import callAPI from '../component/callAPIMainServer'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -34,7 +34,6 @@ class CustomCard extends Component {
                 callAPI(token, `Cart/count/${userPhone}`, 'GET').then(
                     res => {
                         this.props.updateCartCounter(res.data.count);
-                        // localStorage.setItem("TOTAL_ITEM_CART", res.data.count);
                         this.updateCartCounterAsync(`${this.props.rootReducer.cartCounter}`)
                     }
                 ).catch(err => {
