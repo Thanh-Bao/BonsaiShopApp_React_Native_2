@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, BackHandler, Alert, ToastAndroid } from 'react-native'
+import { TouchableWithoutFeedback, Keyboard, Text, View, BackHandler, Alert, ToastAndroid } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
 import Header from '../component/CustomHeader'
@@ -47,30 +47,32 @@ export class CreatePassword extends Component {
             <NativeBaseProvider style={{ flex: 1 }}>
                 <PreventBackButtonNav />
                 <Header title="Menu" navigation={this.props.navigation} />
-                <Center flex={1}>
-                    <Text style={{ fontSize: 20, fontWeight: "900", marginBottom: 20 }}> Chào mừng  {this.state.newPhone} </Text>
-                    <View style={{ marginTop: 10 }}>
-                        <Input
-                            onChangeText={e => this.setState({
-                                password: e
-                            })}
-                            w="80%"
-                            type={this.state.show ? "text" : "password"}
-                            InputRightElement={
-                                <Button onPress={() => { this.handleClick() }}>
-                                    {this.state.show ? "ẩn" : "hiện"}
-                                </Button>
-                            }
-                            placeholder="Vui lòng tạo mật khẩu"
-                        />
-                        <View style={{ marginTop: 30 }}>
-                            <Button
-                                onPress={() => this.handleSubmit()}
-                                colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Xác nhận</Text></Button>
+                <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+                    <Center flex={1}>
+                        <Text style={{ fontSize: 20, fontWeight: "900", marginBottom: 20 }}> Chào mừng  {this.state.newPhone} </Text>
+                        <View style={{ marginTop: 10 }}>
+                            <Input
+                                onChangeText={e => this.setState({
+                                    password: e
+                                })}
+                                w="80%"
+                                type={this.state.show ? "text" : "password"}
+                                InputRightElement={
+                                    <Button onPress={() => { this.handleClick() }}>
+                                        {this.state.show ? "ẩn" : "hiện"}
+                                    </Button>
+                                }
+                                placeholder="Vui lòng tạo mật khẩu"
+                            />
+                            <View style={{ marginTop: 30 }}>
+                                <Button
+                                    onPress={() => this.handleSubmit()}
+                                    colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Xác nhận</Text></Button>
+                            </View>
                         </View>
-                    </View>
 
-                </Center>
+                    </Center>
+                </TouchableWithoutFeedback>
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
                     <NavigationBar navigation={this.props.navigation} />
                 </View>

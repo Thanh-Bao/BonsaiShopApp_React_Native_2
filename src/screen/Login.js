@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Input, Center, Button, NativeBaseProvider, Avatar } from "native-base"
-import { Text, View, ToastAndroid } from 'react-native'
+import { Keyboard, Text, View, ToastAndroid, TouchableWithoutFeedback } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
@@ -92,54 +92,55 @@ export class Login extends Component {
             <NativeBaseProvider style={{ flex: 1 }}>
                 <PreventBackButtonNav />
                 <Header title="Đăng nhập" navigation={this.props.navigation} />
-
-                <Center flex={1}>
-                    <View style={{ marginBottom: 30, marginTop: -80 }}>
-                        <Avatar
-                            size="2xl"
-                            source={require('./../media/bonsai_icon.png')}
-                        >
-                        </Avatar>
-                    </View>
-                    <Input
-                        onChangeText={e => this.setState({
-                            userPhone: e
-                        })}
-                        w="80%"
-                        type="number"
-                        placeholder="Số điện thoại"
-                        keyboardType={'numeric'}
-                    />
-
-                    <View style={{ marginTop: 10 }}>
+                <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+                    <Center flex={1}>
+                        <View style={{ marginBottom: 30, marginTop: -80 }}>
+                            <Avatar
+                                size="2xl"
+                                source={require('./../media/bonsai_icon.png')}
+                            >
+                            </Avatar>
+                        </View>
                         <Input
                             onChangeText={e => this.setState({
-                                password: e
+                                userPhone: e
                             })}
                             w="80%"
-                            type={this.state.show ? "text" : "password"}
-                            InputRightElement={
-                                <Button onPress={() => { this.handleClick() }}>
-                                    {this.state.show ? "ẩn" : "hiện"}
-                                </Button>
-                            }
-                            placeholder="Mật khẩu"
+                            type="number"
+                            placeholder="Số điện thoại"
+                            keyboardType={'numeric'}
                         />
-                    </View>
-                    <View style={{ marginTop: 10 }}>
-                        <Button
-                            onPress={() => this.handleLogin()}
-                            colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Đăng nhập</Text></Button>
-                        <Text style={{ justifyContent: "center", textAlign: 'center', marginTop: 20 }}>Hoặc đăng kí nếu chưa có tài khoản</Text>
-                        <View style={{ marginVertical: 20 }}>
-                            <Button colorScheme="orange"
-                                onPress={() => { this.props.navigation.navigate('Register') }}
-                            ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15 }}>Đăng ký</Text></Button>
+
+                        <View style={{ marginTop: 10 }}>
+                            <Input
+                                onChangeText={e => this.setState({
+                                    password: e
+                                })}
+                                w="80%"
+                                type={this.state.show ? "text" : "password"}
+                                InputRightElement={
+                                    <Button onPress={() => { this.handleClick() }}>
+                                        {this.state.show ? "ẩn" : "hiện"}
+                                    </Button>
+                                }
+                                placeholder="Mật khẩu"
+                            />
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Button
+                                onPress={() => this.handleLogin()}
+                                colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Đăng nhập</Text></Button>
+                            <Text style={{ justifyContent: "center", textAlign: 'center', marginTop: 20 }}>Hoặc đăng kí nếu chưa có tài khoản</Text>
+                            <View style={{ marginVertical: 20 }}>
+                                <Button colorScheme="orange"
+                                    onPress={() => { this.props.navigation.navigate('Register') }}
+                                ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15 }}>Đăng ký</Text></Button>
+                            </View>
+
                         </View>
 
-                    </View>
-
-                </Center>
+                    </Center>
+                </TouchableWithoutFeedback>
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
                     <NavigationBar navigation={this.props.navigation} />
                 </View>

@@ -63,10 +63,10 @@
 // export default Register
 
 import * as React from "react";
-import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Platform, ToastAndroid } from "react-native";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import * as firebase from "firebase";
-import { Input, Center, NativeBaseProvider, Avatar } from "native-base"
+import {  Input, Center, NativeBaseProvider, Avatar } from "native-base"
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
@@ -133,89 +133,91 @@ export default function Register(props) {
         ref={recaptchaVerifier}
         firebaseConfig={firebaseConfig}
       />
-      <Center flex={1}>
+      <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+        <Center flex={1}>
 
-        <View style={{ marginBottom: 30, marginTop: -150 }}>
-          <Avatar
-            size="2xl"
-            source={require('./../media/bonsai_2.png')}
-          >
-          </Avatar>
-        </View>
+          <View style={{ marginBottom: 30, marginTop: -150 }}>
+            <Avatar
+              size="2xl"
+              source={require('./../media/bonsai_2.png')}
+            >
+            </Avatar>
+          </View>
 
-        <Text style={{ marginTop: 20, marginLeft: -100 }}>Nhập số điện thoại : </Text>
-        <TextInput
-          style={{ marginVertical: 10, fontSize: 17, borderColor: "#898a8c", borderWidth: 1.5, borderRadius: 5, width: "60%", height: 45 }}
-          placeholder=" 0943888999"
-          autoFocus
-          keyboardType="numeric"
-          onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
-        />
+          <Text style={{ marginTop: 20, marginLeft: -100 }}>Nhập số điện thoại : </Text>
+          <TextInput
+            style={{ marginVertical: 10, fontSize: 17, borderColor: "#898a8c", borderWidth: 1.5, borderRadius: 5, width: "60%", height: 45 }}
+            placeholder=" 0943888999"
+            autoFocus
+            keyboardType="numeric"
+            onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+          />
 
-        <Button
-          style={{ marginVertical: 10, fontSize: 17, borderColor: "#898a8c", borderWidth: 1.5, borderRadius: 5, width: "60%", height: 45 }}
-          title="Nhận Mã OTP"
-          disabled={!phoneNumber}
-          onPress={async () => {
+          <Button
+            style={{ marginVertical: 10, fontSize: 17, borderColor: "#898a8c", borderWidth: 1.5, borderRadius: 5, width: "60%", height: 45 }}
+            title="Nhận Mã OTP"
+            disabled={!phoneNumber}
+            onPress={async () => {
 
-            if (checkPhoneExist(phoneNumber)) {
-              // The FirebaseRecaptchaVerifierModal ref implements the
-              // FirebaseAuthApplicationVerifier interface and can be
-              // passed directly to `verifyPhoneNumber`.
-              try {
-                const phoneProvider = new firebase.auth.PhoneAuthProvider();
-                const verificationId = await phoneProvider.verifyPhoneNumber(
-                  "+84" + phoneNumber,
-                  recaptchaVerifier.current
-                );
-                setVerificationId(verificationId);
-                ToastAndroid.show(`Mã OTP đã được gửi đi`, ToastAndroid.LONG);
-              } catch (err) {
-                alert(`LỖI : ${err.message}`);
+              if (checkPhoneExist(phoneNumber)) {
+                // The FirebaseRecaptchaVerifierModal ref implements the
+                // FirebaseAuthApplicationVerifier interface and can be
+                // passed directly to `verifyPhoneNumber`.
+                try {
+                  const phoneProvider = new firebase.auth.PhoneAuthProvider();
+                  const verificationId = await phoneProvider.verifyPhoneNumber(
+                    "+84" + phoneNumber,
+                    recaptchaVerifier.current
+                  );
+                  setVerificationId(verificationId);
+                  ToastAndroid.show(`Mã OTP đã được gửi đi`, ToastAndroid.LONG);
+                } catch (err) {
+                  alert(`LỖI : ${err.message}`);
+                }
               }
-            }
 
-          }}
-        />
-
+            }}
+          />
 
 
-        <Text style={{ marginTop: 20, marginLeft: -130 }}>Nhập mã OTP:</Text>
-        <TextInput
-          keyboardType="numeric"
-          style={{ marginVertical: 10, fontSize: 17, borderColor: "#898a8c", borderWidth: 1.5, borderRadius: 5, width: "60%", height: 45 }}
-          editable={!!verificationId}
-          placeholder=" Mã OTP 6 chữ số "
-          onChangeText={setVerificationCode}
-        />
 
-        <Button
-          title="Xác nhận "
-          disabled={!verificationId}
-          onPress={async () => {
-            try {
-              const credential = firebase.auth.PhoneAuthProvider.credential(
-                verificationId,
-                verificationCode
-              );
-              await firebase.auth().signInWithCredential(credential);
-              props.navigation.navigate('CreatePassword', { phone: phoneNumber });
-            } catch (err) {
-              alert(`Error: ${err.message}`);
-            }
-          }}
-        />
-        {message ? (
-          <TouchableOpacity
-            style={[StyleSheet.absoluteFill, { backgroundColor: 0xffffffee, justifyContent: "center" }]}
-            onPress={() => showMessage(undefined)}>
-            <Text style={{ color: message.color || "blue", fontSize: 17, textAlign: "center", margin: 20, }}>
-              {message.text}
-            </Text>
-          </TouchableOpacity>
-        ) : undefined}
+          <Text style={{ marginTop: 20, marginLeft: -130 }}>Nhập mã OTP:</Text>
+          <TextInput
+            keyboardType="numeric"
+            style={{ marginVertical: 10, fontSize: 17, borderColor: "#898a8c", borderWidth: 1.5, borderRadius: 5, width: "60%", height: 45 }}
+            editable={!!verificationId}
+            placeholder=" Mã OTP 6 chữ số "
+            onChangeText={setVerificationCode}
+          />
 
-      </Center>
+          <Button
+            title="Xác nhận "
+            disabled={!verificationId}
+            onPress={async () => {
+              try {
+                const credential = firebase.auth.PhoneAuthProvider.credential(
+                  verificationId,
+                  verificationCode
+                );
+                await firebase.auth().signInWithCredential(credential);
+                props.navigation.navigate('CreatePassword', { phone: phoneNumber });
+              } catch (err) {
+                alert(`Error: ${err.message}`);
+              }
+            }}
+          />
+          {message ? (
+            <TouchableOpacity
+              style={[StyleSheet.absoluteFill, { backgroundColor: 0xffffffee, justifyContent: "center" }]}
+              onPress={() => showMessage(undefined)}>
+              <Text style={{ color: message.color || "blue", fontSize: 17, textAlign: "center", margin: 20, }}>
+                {message.text}
+              </Text>
+            </TouchableOpacity>
+          ) : undefined}
+
+        </Center>
+      </TouchableWithoutFeedback>
 
       <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
         <NavigationBar navigation={props.navigation} />

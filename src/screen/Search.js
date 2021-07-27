@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, FlatList, ActivityIndicator } from 'react-native'
+import { TouchableWithoutFeedback, Keyboard, Text, View, FlatList, ActivityIndicator } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
@@ -44,67 +44,68 @@ export class Search extends Component {
         return (
             < NativeBaseProvider style={{ flex: 1 }}>
                 <PreventBackButtonNav />
-                {console.log(this.state.keyword)}
                 <Header title="Tìm cây cảnh" navigation={this.props.navigation} />
-                <Center>
-                    <Box w="80%" style={{ marginTop: 20 }}>
-                        <Input
-                            onChangeText={e => this.setState({
-                                keyword: e
-                            })}
-                            InputRightElement={
-                                <Button
-                                    colorScheme="blue"
-                                    onPress={() => this.getData()}>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Icon
-                                            name='search'
-                                            type='font-awesome'
-                                            size={20}
-                                            color="#ffffff"
-                                        />
-                                        <Text style={{ fontSize: 12, fontWeight: "900", color: "white" }}>
-                                            Tìm
-                                        </Text>
-                                    </View>
+                <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+                    <Center>
+                        <Box w="80%" style={{ marginTop: 20 }}>
+                            <Input
+                                onChangeText={e => this.setState({
+                                    keyword: e
+                                })}
+                                InputRightElement={
+                                    <Button
+                                        colorScheme="blue"
+                                        onPress={() => { Keyboard.dismiss(), this.getData() }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Icon
+                                                name='search'
+                                                type='font-awesome'
+                                                size={20}
+                                                color="#ffffff"
+                                            />
+                                            <Text style={{ fontSize: 12, fontWeight: "900", color: "white" }}>
+                                                Tìm
+                                            </Text>
+                                        </View>
 
-                                </Button>
+                                    </Button>
 
-                            }
-                            placeholder="Input" // mx={4}
-                            _light={{
-                                placeholderTextColor: "blueGray.400",
-                            }}
-                            _dark={{
-                                placeholderTextColor: "blueGray.50",
-                            }}
-                        />
-                    </Box>
+                                }
+                                placeholder="Input" // mx={4}
+                                _light={{
+                                    placeholderTextColor: "blueGray.400",
+                                }}
+                                _dark={{
+                                    placeholderTextColor: "blueGray.50",
+                                }}
+                            />
+                        </Box>
 
-                    {this.state.showLoading === true ? (<View style={{ marginTop: 100 }}>
-                        <ActivityIndicator size="large" color="#0000ff" />
-                        <View style={{ flexDirection: "row", justifyContent: 'center' }}>
-                            <Text >Vui lòng chờ ...</Text>
-                        </View>
-                    </View>) :
-                        <FlatList style={{ marginBottom: 65 }}
-                            data={this.state.listProduct}
-                            renderItem={({ item }) =>
-                                <CustomCard
-                                    navigation={this.props.navigation}
-                                    name={item.name}
-                                    thumbnail={item.thumbnail}
-                                    description={item.description}
-                                    price={item.price}
-                                    productID={item.productID}
-                                />
-                            }
-                            keyExtractor={(item, index) => index.toString()}
-                            onEndReached={this.handleLoadMore}
-                        />
-                    }
+                        {this.state.showLoading === true ? (<View style={{ marginTop: 100 }}>
+                            <ActivityIndicator size="large" color="#0000ff" />
+                            <View style={{ flexDirection: "row", justifyContent: 'center' }}>
+                                <Text >Vui lòng chờ ...</Text>
+                            </View>
+                        </View>) :
+                            <FlatList style={{ marginBottom: 65 }}
+                                data={this.state.listProduct}
+                                renderItem={({ item }) =>
+                                    <CustomCard
+                                        navigation={this.props.navigation}
+                                        name={item.name}
+                                        thumbnail={item.thumbnail}
+                                        description={item.description}
+                                        price={item.price}
+                                        productID={item.productID}
+                                    />
+                                }
+                                keyExtractor={(item, index) => index.toString()}
+                                onEndReached={this.handleLoadMore}
+                            />
+                        }
 
-                </Center>
+                    </Center>
+                </TouchableWithoutFeedback>
                 <View style={{ position: 'absolute', left: 0, right: 0, bottom: 4, justifyContent: 'center', alignItems: 'center' }}>
                     <NavigationBar navigation={this.props.navigation} />
                 </View>
