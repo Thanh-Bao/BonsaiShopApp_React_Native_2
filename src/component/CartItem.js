@@ -48,9 +48,11 @@ class CartItem extends Component {
             res => {
                 this.props.updateCartCounter(res.data.count);
                 this.updateCartCounterAsync(`${this.props.rootReducer.cartCounter}`)
+                this.props.passingSum(res.data.sum);
             }).catch(() => {
                 alert("Lỗi lấy tổng sản phẩm giỏ hàng");
             })
+
     }
 
     deleteItem(productID) {
@@ -64,10 +66,11 @@ class CartItem extends Component {
             res => {
                 this.props.updateCartCounter(res.data.count);
                 this.updateCartCounterAsync(`${this.props.rootReducer.cartCounter}`)
+                this.props.passingSum(res.data.sum);
             }).catch(() => {
                 alert("Lỗi lấy tổng sản phẩm giỏ hàng");
             });
-
+        this.props.onUpdateList();
 
     }
 
@@ -81,7 +84,7 @@ class CartItem extends Component {
                     borderWidth: 1.5, paddingVertical: 10,
                     borderRadius: 8, marginVertical: 3
                 }}
-                key={this.props.productId}
+
             >
 
                 <View style={{ flexDirection: "row", marginTop: 25, marginHorizontal: 10 }}>
@@ -107,7 +110,7 @@ class CartItem extends Component {
                         <Text style={{ fontSize: 12 }}>Đơn giá:{numeral(this.props.price).format('0,0')} đ </Text>
                     </ListItem.Title>
                     <View style={{ flexDirection: 'row' }}>
-                        <Text style={{ fontSize: 13 }}>Tổng: {numeral(this.props.quantity * this.props.price).format('0,0')} đ</Text>
+                        <Text style={{ fontSize: 13 }}>Tổng: {numeral(this.state.quantity * this.props.price).format('0,0')} đ</Text>
                     </View>
                 </ListItem.Content>
                 <View style={{ flexDirection: "row", marginTop: 25, marginHorizontal: 10 }}>
