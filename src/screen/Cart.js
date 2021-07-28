@@ -32,6 +32,21 @@ class Cart extends Component {
 
     }
 
+    purchase() {
+        const { userPhoneLogined, token } = this.props.rootReducer;
+        CallAPI(token, 'Orders/accept-purchase', 'POST', { phone: userPhoneLogined })
+            .then(res => {
+                // trả về orderID
+                // console.log(res.data)
+                this.handleAfterDelete()
+                this.props.navigation.navigate('Purchase', { orderID: res.data })
+            })
+            .catch(() => {
+                alert("LỖI THANH TOÁN ! Hãy Xóa cache, LOCALSTORAGE, Ctrl+F5 & dùng tab ẩn danh");
+            })
+
+
+    }
 
     updateCartCounterAsync = async (count) => {
         await AsyncStorage.setItem("CART_COUNTER", count);
@@ -126,7 +141,7 @@ class Cart extends Component {
                                         <Text>Tổng cộng: {numeral(this.state.sum).format('0,0')} </Text>
                                     </View>
                                     <View>
-                                        <Button>Xác nhận thanh toán</Button>
+                                        <Button onPress={() => { this.purchase() }}>Xác nhận thanh toán</Button>
                                     </View>
                                     <View>
                                     </View>
