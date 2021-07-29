@@ -71,7 +71,11 @@ class NavigationBar extends Component {
                         name='user'
                         type='font-awesome'
                         size={30}
-                        color={currentScreen == "Account" || currentScreen == "Login" || currentScreen == "Register" ? "#0008ff" : "#000000"}
+                        color={currentScreen == "Account" ||
+                            currentScreen == "Login" ||
+                            currentScreen == "Register"
+                            || currentScreen == "Profile"
+                            ? "#0008ff" : "#000000"}
                         onPress={() => {
                             this.props.rootReducer.userPhoneLogined == null ?
                                 (this.props.switchScreen("Login"), this.props.navigation.navigate('Login')) :

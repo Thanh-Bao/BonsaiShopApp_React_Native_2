@@ -5,11 +5,11 @@ export class preventBackButtonNav extends Component {
     backAction = () => {
         Alert.alert(":((", "Bạn chắc chắn muốn thoát?", [
             {
-                text: "Cancel",
+                text: "Ỏ lại",
                 onPress: () => null,
                 style: "cancel"
             },
-            { text: "YES", onPress: () => BackHandler.exitApp() }
+            { text: "Xác nhận thoát", onPress: () => BackHandler.exitApp() }
         ]);
         return true;
     };
