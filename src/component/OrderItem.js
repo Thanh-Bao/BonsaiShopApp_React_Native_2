@@ -8,11 +8,16 @@ import { updateCartCounter } from '../store/action/countCartItem'
 import CallAPI from '../component/callAPIMainServer'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import unixTimeToDate from './UnixTimeToDate'
+import { Modal, Center, NativeBaseProvider } from "native-base"
 
 
 class OrderItem extends Component {
     constructor(props) {
         super(props)
+        this.state = ({
+            showModal: false,
+            listItem: []
+        })
     }
 
 
@@ -24,9 +29,18 @@ class OrderItem extends Component {
         await AsyncStorage.setItem("CART_COUNTER", count);
     }
 
-    
 
-    
+
+    componentDidMount() {
+        const { token } = this.props.rootReducer;
+        CallAPI(token, 'Orders/orderdetail', null, { orderId: this.props.orderId }).then(res => {
+            this.setState({
+                listItem: res.data
+            })
+        }).catch(() => {
+            alert("Lỗi lấy chi tiết đơn hàng")
+        })
+    }
 
     cancelOrder(orderId) {
         const { token } = this.props.rootReducer;
@@ -92,7 +106,7 @@ class OrderItem extends Component {
 
 
         return (
-            <View>
+            <NativeBaseProvider>
                 <Card>
                     <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 5 }}>{unixTimeToDate(this.props.timestamp)}</Text>
                     <Card.Divider />
@@ -129,8 +143,48 @@ class OrderItem extends Component {
                     <View style={{ flexDirection: 'row', justifyContent: 'center', flex: 1 }}>
                         <View style={{ borderRadius: 0, marginLeft: 0, marginRight: 10, marginBottom: 0 }}>
                             <Button
-                                onPress={() => { this.props.navigation.navigate('Detail', { productID: this.props.productID }) }}
+                                onPress={() => { this.setState({ showModal: true }) }}
                                 title={'Chi tiết hóa đơn'} />
+                            <Modal isOpen={this.state.showModal} onClose={() => this.setState({ showModal: false })}>
+                                <Modal.Content maxWidth="400px">
+                                    <Modal.CloseButton />
+                                    <Modal.Header> <Text>Chi tiết đơn hàng #{this.props.orderId}</Text> </Modal.Header>
+                                    <Modal.Body>
+                                        {console.log(this.state.listItem)}
+                                        Sit nulla est ex deserunt exercitation anim occaecat. Nostrud
+                                        ullamco deserunt aute id consequat veniam incididunt duis in sint
+                                        irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit
+                                        officia tempor esse quis. Sunt ad dolore quis aute consequat. Magna
+                                        exercitation reprehenderit magna aute tempor cupidatat consequat
+                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
+                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
+                                        ullamco deserunt aute id consequat veniam incididunt duis in sint
+                                        irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit
+                                        officia tempor esse quis. Sunt ad dolore quis aute consequat. Magna
+                                        exercitation reprehenderit magna aute tempor cupidatat consequat
+                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
+                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
+                                        exercitation reprehenderit magna aute tempor cupidatat consequat
+                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
+                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
+                                        ullamco deserunt aute id consequat veniam incididunt duis in sint
+                                        irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit
+                                        officia tempor esse quis. Sunt ad dolore quis aute consequat. Magna
+                                        exercitation reprehenderit magna aute tempor cupidatat consequat
+                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
+                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button
+                                            title="Đóng"
+                                            onPress={() => {
+                                                this.setState({ showModal: false })
+                                            }}
+                                        />
+
+                                    </Modal.Footer>
+                                </Modal.Content>
+                            </Modal>
                         </View>
 
                         <Button
@@ -139,7 +193,7 @@ class OrderItem extends Component {
                             title='Hủy đơn' />
                     </View>
                 </Card>
-            </View >
+            </NativeBaseProvider >
         )
     }
 }
