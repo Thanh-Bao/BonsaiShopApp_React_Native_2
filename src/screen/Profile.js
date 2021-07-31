@@ -113,6 +113,11 @@ class Profile extends Component {
                 <PreventBackButtonNav />
                 <Header title="Đơn hàng đã mua" navigation={this.props.navigation} />
 
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>Bạn đang đăng nhập bằng tài khoản: {this.props.rootReducer.userPhoneLogined}</Text>
+                <View style={{ width: "40%", marginLeft: 40, marginVertical: 10 }}>
+                    <Button title="Đăng xuất" color="red"></Button>
+                </View>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>Lịch sử đơn hàng</Text>
                 {this.state.listItem.length == 0 ?
                     <View style={{ flex: 1, flexDirection: "column", justifyContent: 'center' }}>
                         <ActivityIndicator size="large" color="#0000ff" />

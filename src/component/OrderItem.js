@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Image, Button, ToastAndroid, Alert } from 'react-native'
+import { Text, View, Image, Button, ToastAndroid, Alert, FlatList, ScrollView } from 'react-native'
 import { Card, ListItem, Icon, Badge } from 'react-native-elements'
 import { decode } from 'he'
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import CallAPI from '../component/callAPIMainServer'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import unixTimeToDate from './UnixTimeToDate'
 import { Modal, Center, NativeBaseProvider } from "native-base"
+import ItemOrderDetail from '../component/ItemOrderDetail'
 
 
 class OrderItem extends Component {
@@ -150,29 +151,17 @@ class OrderItem extends Component {
                                     <Modal.CloseButton />
                                     <Modal.Header> <Text>Chi tiết đơn hàng #{this.props.orderId}</Text> </Modal.Header>
                                     <Modal.Body>
-                                        {console.log(this.state.listItem)}
-                                        Sit nulla est ex deserunt exercitation anim occaecat. Nostrud
-                                        ullamco deserunt aute id consequat veniam incididunt duis in sint
-                                        irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit
-                                        officia tempor esse quis. Sunt ad dolore quis aute consequat. Magna
-                                        exercitation reprehenderit magna aute tempor cupidatat consequat
-                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
-                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
-                                        ullamco deserunt aute id consequat veniam incididunt duis in sint
-                                        irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit
-                                        officia tempor esse quis. Sunt ad dolore quis aute consequat. Magna
-                                        exercitation reprehenderit magna aute tempor cupidatat consequat
-                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
-                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
-                                        exercitation reprehenderit magna aute tempor cupidatat consequat
-                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
-                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
-                                        ullamco deserunt aute id consequat veniam incididunt duis in sint
-                                        irure nisi. Mollit officia cillum Lorem ullamco minim nostrud elit
-                                        officia tempor esse quis. Sunt ad dolore quis aute consequat. Magna
-                                        exercitation reprehenderit magna aute tempor cupidatat consequat
-                                        elit dolor adipisicing. Mollit dolor eiusmod sunt ex incididunt
-                                        cillum quis. Velit duis sit officia eiusmod Lorem aliqua enim
+                                        {this.state.listItem.map((item) => <ItemOrderDetail
+                                            key={item.productId}
+                                            productID={item.productId}
+                                            productName={item.productName}
+                                            productPrice={item.productPrice}
+                                            quantity={item.quantity}
+                                            thumbnail={item.thumbnail}
+                                            totalMoney={item.totalMoney}
+                                            navigation={this.props.navigation}
+                                        />)}
+
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button
