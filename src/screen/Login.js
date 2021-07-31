@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Input, Center, Button, NativeBaseProvider, Avatar } from "native-base"
-import { Keyboard, Text, View, ToastAndroid, TouchableWithoutFeedback } from 'react-native'
+import { Keyboard, Text, View, ToastAndroid, TouchableWithoutFeedback, ActivityIndicator } from 'react-native'
 import NavigationBar from '../component/NavigationBar';
 import Header from '../component/CustomHeader'
 import PreventBackButtonNav from '../component/PreventBackButtonNav'
@@ -21,7 +21,8 @@ export class Login extends Component {
         this.state = ({
             show: false,
             userPhone: null,
-            password: null
+            password: null,
+            showTextWaitting: false
         })
     }
 
@@ -85,6 +86,10 @@ export class Login extends Component {
             )
         }
 
+        this.setState({
+            showTextWaitting: true
+        })
+
     }
 
     render() {
@@ -129,7 +134,7 @@ export class Login extends Component {
                         <View style={{ marginTop: 10 }}>
                             <Button
                                 onPress={() => this.handleLogin()}
-                                colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>Đăng nhập</Text></Button>
+                                colorScheme="blue" ><Text style={{ color: 'white', fontWeight: "900", fontSize: 15, paddingHorizontal: 110 }}>{this.state.showTextWaitting ?  <ActivityIndicator size="large" color="#0000ff" /> : "đăng nhập"}</Text></Button>
                             <Text style={{ justifyContent: "center", textAlign: 'center', marginTop: 20 }}>Hoặc đăng kí nếu chưa có tài khoản</Text>
                             <View style={{ marginVertical: 20 }}>
                                 <Button colorScheme="orange"

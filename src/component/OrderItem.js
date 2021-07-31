@@ -153,7 +153,7 @@ class OrderItem extends Component {
                                     <Modal.Body>
                                         {this.state.listItem.map((item) => <ItemOrderDetail
                                             key={item.productId}
-                                            productID={item.productId}
+                                            productId={item.productId}
                                             productName={item.productName}
                                             productPrice={item.productPrice}
                                             quantity={item.quantity}

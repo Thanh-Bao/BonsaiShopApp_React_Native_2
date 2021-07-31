@@ -67,6 +67,8 @@ import OrderItem from '../component/OrderItem'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CallAPI from '../component/callAPIMainServer'
+import { updateCartCounter } from '../store/action/countCartItem'
+import { storeToken } from '../store/action/storeToken'
 
 
 class Profile extends Component {
@@ -107,6 +109,22 @@ class Profile extends Component {
         )
     }
 
+    clearStorage = async () => {
+        try {
+            await AsyncStorage.removeItem("USER_PHONE");
+            await AsyncStorage.removeItem("CART_COUNTER");
+            await AsyncStorage.removeItem("TOKEN");
+
+            this.props.addUserPhoneLogin(null);
+            this.props.updateCartCounter(0);
+            this.props.storeToken("0000")
+
+            this.props.navigation.navigate('Home')
+        } catch (e) {
+            alert('Failed to clear the async storage.')
+        }
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -115,7 +133,9 @@ class Profile extends Component {
 
                 <Text style={{ fontSize: 15, fontWeight: "bold" }}>Bạn đang đăng nhập bằng tài khoản: {this.props.rootReducer.userPhoneLogined}</Text>
                 <View style={{ width: "40%", marginLeft: 40, marginVertical: 10 }}>
-                    <Button title="Đăng xuất" color="red"></Button>
+                    <Button title="Đăng xuất" color="red"
+                        onPress={() => { this.clearStorage() }}
+                    ></Button>
                 </View>
                 <Text style={{ fontSize: 15, fontWeight: "bold" }}>Lịch sử đơn hàng</Text>
                 {this.state.listItem.length == 0 ?
@@ -164,6 +184,8 @@ const mapDispatchToProps = dispatch => (
     bindActionCreators({
         switchScreen,
         addUserPhoneLogin,
+        updateCartCounter,
+        storeToken
     }, dispatch)
 )
 
