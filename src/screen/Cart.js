@@ -39,7 +39,7 @@ class Cart extends Component {
                 // trả về orderID
                 // console.log(res.data)
                 this.handleAfterDelete()
-                this.props.navigation.navigate('Purchase', { orderID: res.data })
+                this.props.navigation.navigate('Purchase', { orderID: res.data, sum: this.state.sum })
             })
             .catch(() => {
                 alert("LỖI THANH TOÁN ! Hãy Xóa cache, LOCALSTORAGE, Ctrl+F5 & dùng tab ẩn danh");
