@@ -44,6 +44,7 @@ import { Input, Center, NativeBaseProvider, Select } from "native-base";
 import { Icon, Button } from 'react-native-elements'
 import { connect } from 'react-redux';
 import CallAPI from '../component/callAPIMainServer'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Purchase = (props) => {
     const [provinces, setProvinces] = useState([]);
@@ -58,6 +59,8 @@ const Purchase = (props) => {
     const [street, setStreet] = useState("");
 
     const [username, setUsername] = useState("");
+
+    const [validation, setValidation] = useState(false);
 
     const URL = "https://baobaoshop.live/api/"
 
@@ -109,6 +112,10 @@ const Purchase = (props) => {
         }
     }, [selectedDistrict]);
 
+    useEffect(() => {
+        getUserName();
+    }, []);
+
     function submitUserData() {
         const address = "tỉnh " + nameProvince + ", huyện " + nameDistrict + ", xã " + nameWard + ", " + street;
         const fullName = username;
@@ -121,7 +128,11 @@ const Purchase = (props) => {
             }
             const { userPhoneLogined, token } = props.rootReducer
             CallAPI(token, `Users/${userPhoneLogined}`, 'PUT', null, body).then(() => {
-                CallAPI(token, 'Orders/accept-purchase', 'POST', { phone: userPhoneLogined }).catch(() => alert("lỗi thanh toán"))
+                storeUserName(fullName);
+                CallAPI(token, 'Orders/accept-purchase', 'POST', { phone: userPhoneLogined }).then(() => {
+                    setValidation(true)
+                })
+                    .catch(() => alert("lỗi thanh toán"))
             }).catch(() => alert("lỗi cập nhật thông tin khác hàng"))
         }
     }
@@ -129,7 +140,7 @@ const Purchase = (props) => {
     function bankingHandler() {
         const { userPhoneLogined, token } = props.rootReducer
         CallAPI(token, 'Orders/check-transfer', 'POST', { orderID: orderID }).then(
-            CallAPI('Orders/purchase-successful', 'POST', { orderId: orderID }).then(res => {
+            CallAPI(token, 'Orders/purchase-successful', 'POST', { orderId: orderID }).then(res => {
                 alert("Đã xác thực thành công, bạn sẽ nhận được hàng từ 3-5 ngày");
             }).catch(() => {
                 alert("lỗi cập nhật phương thức thanh toán, đơn hàng được chuyển qua COD")
@@ -137,14 +148,28 @@ const Purchase = (props) => {
         ).catch(() => alert("bạn chưa chuyển tiền, hoặc hệ thống đang bảo trì"))
     }
 
+    async function getUserName() {
+        const value = await AsyncStorage.getItem("USER_NAME")
+        if (value !== null) {
+            setUsername(value);
+        }
+    }
+
+    async function storeUserName(name) {
+        await AsyncStorage.setItem("USER_NAME", name)
+
+    }
+
+
     return (
         <NativeBaseProvider>
             <ScrollView>
-            <Center>
+                <Center>
                     <Text style={{ marginVertical: 30 }}>Tên người nhận hàng: </Text>
                     <Input
                         w="70%"
-                        placeholder="Nhập Họ Tên"
+                        placeholder={"nhập họ tên"}
+                        value={username}
                         onChangeText={e => { setUsername(e) }}
                     />
                     <Text style={{ marginVertical: 20 }} >Chọn địa chỉ giao hàng: </Text>
@@ -207,7 +232,14 @@ const Purchase = (props) => {
                     </Text>
 
                     <Button
-                        onPress={() => { submitUserData() }}
+                        onPress={() => {
+                            submitUserData();
+                            if (validation) {
+                                // bankingHandler();
+                                alert("Momo đang bảo trì, đơn hàng được chuyển qua COD")
+                                props.navigation.navigate('Home')
+                            }
+                        }}
                         icon={<Icon name='credit-card'
                             type='font-awesome' color='#ffff' />}
                         buttonStyle={{ marginVertical: 20, borderRadius: 5, fontWeight: "900" }}
@@ -218,8 +250,10 @@ const Purchase = (props) => {
                     <Button
                         onPress={() => {
                             submitUserData();
-                            alert("Xác nhận đơn hàng thành công, bạn sẽ nhận được hàng từ 3-5 ngày")
-                            props.navigation.navigate('Home')
+                            if (validation) {
+                                alert("Xác nhận đơn hàng thành công, bạn sẽ nhận được hàng từ 3-5 ngày")
+                                props.navigation.navigate('Home')
+                            }
                         }}
                         icon={<Icon name='money'
                             type='font-awesome' color='#ffff' />}
