@@ -1,12 +1,17 @@
 {
   "expo": {
-    "name": "BảoBảoShopqưertyuio6546547467474utrhrth",
-    "slug": "BảoBảoShopquertyuio6546547467474utrhrth",
+    "name": "Bảo Bảo Shop",
+    "icon": "./bonsai_icon.png",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "slug": "BaoBaoShop",
+    "ios": {
+      "bundleIdentifier": "com.nonglam.baobaoshop",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.nonglam.baobaoshop",
+      "versionCode": 1
+    },
     "description": ""
-  },
-  "name": "BảoBảoShop"
+  }
 }

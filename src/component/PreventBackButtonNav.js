@@ -5,7 +5,7 @@ export class preventBackButtonNav extends Component {
     backAction = () => {
         Alert.alert(":((", "Bạn chắc chắn muốn thoát?", [
             {
-                text: "Ỏ lại",
+                text: "Ở lại",
                 onPress: () => null,
                 style: "cancel"
             },

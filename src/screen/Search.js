@@ -32,6 +32,11 @@ export class Search extends Component {
                 listProduct: respnse.data.list,
                 showLoading: false
             })
+
+            if (this.state.listProduct.length === 0) {
+                alert("Không tìm thấy")
+            }
+
         }).catch((err) => {
             alert('lỗi lấy danh sách sản phẩm')
         })
@@ -71,7 +76,7 @@ export class Search extends Component {
                                     </Button>
 
                                 }
-                                placeholder="Input" // mx={4}
+                                placeholder="Bạn muốn tìm cây gì?" // mx={4}
                                 _light={{
                                     placeholderTextColor: "blueGray.400",
                                 }}

@@ -66,23 +66,25 @@ class Cart extends Component {
 
     updateList() {
         const { userPhoneLogined, token } = this.props.rootReducer;
-        CallAPI(token, `Cart/${userPhoneLogined}`).then(res => {
-            this.setState({
-                listProduct: res.data
-            })
-        }).catch(() => {
-            console.log("LỖI LẤY DANH SÁCH GIỎ HÀNG");
-        })
-
-        CallAPI(token, `Cart/count/${userPhoneLogined}`).then(
-            res => {
-
-                this.setState({ sum: res.data.sum })
-                this.props.updateCartCounter(res.data.count);
-                this.updateCartCounterAsync(`${this.props.rootReducer.cartCounter}`)
+        if (userPhoneLogined) {
+            CallAPI(token, `Cart/${userPhoneLogined}`).then(res => {
+                this.setState({
+                    listProduct: res.data
+                })
             }).catch(() => {
-                alert("Lỗi lấy tổng sản phẩm giỏ hàng");
+                console.log("LỖI LẤY DANH SÁCH GIỎ HÀNG");
             })
+
+            CallAPI(token, `Cart/count/${userPhoneLogined}`).then(
+                res => {
+
+                    this.setState({ sum: res.data.sum })
+                    this.props.updateCartCounter(res.data.count);
+                    this.updateCartCounterAsync(`${this.props.rootReducer.cartCounter}`)
+                }).catch(() => {
+                    alert("Lỗi lấy tổng sản phẩm giỏ hàng");
+                })
+        }
     }
 
     render() {
